@@ -9,7 +9,7 @@ cors({
     allowedHeaders:true,
     methods:["GET","POST,PUT","PATCH","DELETE"],
     optionsSuccessStatus:200,
-    origin:`http://localhost:${process.env.PORT}`
+    origin:`https://bus-book-yzbe.onrender.com`
 });
 
 const app=express();
@@ -19,5 +19,5 @@ app.use(express.urlencoded({extended:true}));
 app.use("/upload",express.static("/src/upload"));
 app.use("/api",authRoutes);
 app.listen(process.env.PORT,()=>{
-    console.log(`Server Started at http://localhost:${process.env.PORT}`);
+    console.log(`Server Started at https://bus-book-yzbe.onrender.com`);
 });
