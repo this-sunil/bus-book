@@ -5,11 +5,15 @@ console.log(`User=>${process.env.DB_USER}`);
 
 
 const pool=new Pool({
-  host:process.env.DB_HOST,
-  database:process.env.DB_NAME,
-  port:process.env.DB_PORT,
-  user:process.env.DB_USER,
-  password:""
+  connectionString:process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false // 🔐 Required for Render-hosted PostgreSQL
+  }
+  // host:process.env.DB_HOST,
+  // database:process.env.DB_NAME,
+  // port:process.env.DB_PORT,
+  // user:process.env.DB_USER,
+  // password:""
 });
 const connect=async()=>{
   pool.connect((err)=>{
