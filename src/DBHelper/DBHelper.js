@@ -16,11 +16,10 @@ const pool=new Pool({
   // password:""
 });
 const connect=async()=>{
-  pool.connect((err)=>{
-    if(err){
-        console.log(`Error Connecting Database=>${err.message}`);
-    }
-    console.log(`Database Connected Successfully !!!`);
+  pool.connect()
+  .then(() => console.log("Database Connected Successfully !!!"))
+  .catch((err) => {
+    console.error("Error Connecting Database=>", err.message);
   });
 };
 connect();
