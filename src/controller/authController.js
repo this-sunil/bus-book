@@ -106,3 +106,60 @@ export const loginController = async (req, res) => {
     });
   }
 };
+
+export const deleteUserController=async(req,res)=>{
+  const id=req.body.id;
+  try{
+    const query=`DELETE FROM users WHERE id=$1`;
+    const {rows}=await pool.query(query,[id]);
+    if(rows.length>0){
+      return res.status(200).json({
+        status:true,
+        msg:"Delete User Successfully",
+        result:rows[0]
+      });
+    }
+  }
+  catch(e){
+    console.log(`Error in User Delete Operation=>${e.message}`);
+    return res.status(500).json({
+        status:false,
+        msg:"Internal Server Error"
+    });
+  }
+};
+
+export const updateUserController=async(req,res)=>{
+  const { name, email, phone }=req.body;
+  try {
+    const field=[];
+    const value=[];
+    const photo=req.file?req.file.filename:"";
+    let index=2;
+    const data={ name, email, phone };
+    for(const [key,value] of Object.entries(data)){
+      if(value!==undefined){
+        field.push(`${key}=$${index++}`);
+        value.push(value);
+      }
+    }
+    field.push(`photo=$${index}`);
+    value.push(photo);
+    const query=`UPDATE users SET ${field.join(",")} WHERE id=$1`;
+    const {rows}=await pool.query(query,value);
+    if(rows.length>0){
+      return res.status(200).json({
+        status:true,
+        msg:"Update User Successfully",
+        result:rows[0]
+      });
+    }
+  } catch (error) {
+    console.log(`Error in Update Controller=>${error.message}`);
+    return res.status(500).json({
+      status:false,
+      msg:"Internal Server Error"
+    });
+  }
+
+};
