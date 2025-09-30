@@ -13,7 +13,7 @@ const admin = async () => {
     "admin",
     "male",
     "12345678",
-    ""
+    "",
   ]);
   if (rows.length > 0) {
     console.log(`Admin Inserted Data`);
@@ -38,34 +38,43 @@ const createUserTable = async () => {
 createUserTable();
 
 export const registerController = async (req, res) => {
-  const { name, email, phone, pass,gender,deviceToken } = req.body;
+  const { name, email, phone, pass, gender, deviceToken } = req.body;
   try {
-    if(!name || !email || !phone || !pass || !gender || !deviceToken){
-        return res.status(404).json({
-            status:false,
-            msg:"Missing required field"
-        });
+    if (!name || !email || !phone || !pass || !gender || !deviceToken) {
+      return res.status(404).json({
+        status: false,
+        msg: "Missing required field",
+      });
     }
     const role = "user";
-    const hashPass=await bcrypt.hash(pass,10);
+    const hashPass = await bcrypt.hash(pass, 10);
     const query =
       "INSERT INTO users(name,email,phone,pass,role,gender,deviceToken,photo) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *";
-    const { rows } = await pool.query(query, [name, email, phone, hashPass, role,gender,deviceToken,'']);
-     delete rows[0].pass;
+    const { rows } = await pool.query(query, [
+      name,
+      email,
+      phone,
+      hashPass,
+      role,
+      gender,
+      deviceToken,
+      "",
+    ]);
+    delete rows[0].pass;
     if (rows.length > 0) {
       const token = await generateToken(role);
       return res.status(200).json({
         status: true,
         msg: "User Register Successfully",
         token: token,
-        result: rows[0]
+        result: rows[0],
       });
     }
   } catch (error) {
     console.log(`Error in register=> ${error.message}`);
     return res.status(500).json({
       status: false,
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -73,25 +82,25 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
   const { phone, pass } = req.body;
   try {
-    if(!phone || !pass){
-        return res.status(404).json({
-            status:false,
-            msg:"Missing required field"
-        });
+    if (!phone || !pass) {
+      return res.status(404).json({
+        status: false,
+        msg: "Missing required field",
+      });
     }
     const existUser = `SELECT * FROM users WHERE phone=$1`;
     const { rows } = await pool.query(existUser, [phone]);
     const isMatch = await bcrypt.compare(pass, rows[0].pass);
     const token = await generateToken(rows[0].role);
     delete rows[0].pass;
-    if(!isMatch){
-        return res.status(404).json({
-            status:false,
-            msg:"Password doesn't Match"
-        });
+    if (!isMatch) {
+      return res.status(404).json({
+        status: false,
+        msg: "Password doesn't Match",
+      });
     }
-    if(rows.length>0){
-        return res.status(200).json({
+    if (rows.length > 0) {
+      return res.status(200).json({
         status: true,
         msg: "User Login Successfully!!!",
         token: token,
@@ -107,59 +116,57 @@ export const loginController = async (req, res) => {
   }
 };
 
-export const deleteUserController=async(req,res)=>{
-  const id=req.body.id;
-  try{
-    const query=`DELETE FROM users WHERE id=$1`;
-    const {rows}=await pool.query(query,[id]);
-    if(rows.length>0){
+export const deleteUserController = async (req, res) => {
+  const id = req.body.id;
+  try {
+    const query = `DELETE FROM users WHERE id=$1`;
+    const { rows } = await pool.query(query, [id]);
+    if (rows.length > 0) {
       return res.status(200).json({
-        status:true,
-        msg:"Delete User Successfully",
-        result:rows[0]
+        status: true,
+        msg: "Delete User Successfully",
+        result: rows[0],
       });
     }
-  }
-  catch(e){
+  } catch (e) {
     console.log(`Error in User Delete Operation=>${e.message}`);
     return res.status(500).json({
-        status:false,
-        msg:"Internal Server Error"
+      status: false,
+      msg: "Internal Server Error",
     });
   }
 };
 
-export const updateUserController=async(req,res)=>{
-  const { name, email, phone }=req.body;
+export const updateUserController = async (req, res) => {
+  const { name, email, phone, gender } = req.body;
   try {
-    const field=[];
-    const value=[];
-    const photo=req.file?req.file.filename:"";
-    let index=2;
-    const data={ name, email, phone };
-    for(const [key,value] of Object.entries(data)){
-      if(value!==undefined){
+    const field = [];
+    const value = [];
+    const photo = req.file ? req.file.filename : "";
+    let index = 2;
+    const data = { name, email, phone, gender };
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined) {
         field.push(`${key}=$${index++}`);
         value.push(value);
       }
     }
     field.push(`photo=$${index}`);
     value.push(photo);
-    const query=`UPDATE users SET ${field.join(",")} WHERE id=$1`;
-    const {rows}=await pool.query(query,value);
-    if(rows.length>0){
+    const query = `UPDATE users SET ${field.join(",")} WHERE id=$1`;
+    const { rows } = await pool.query(query, value);
+    if (rows.length > 0) {
       return res.status(200).json({
-        status:true,
-        msg:"Update User Successfully",
-        result:rows[0]
+        status: true,
+        msg: "Update User Successfully",
+        result: rows[0],
       });
     }
   } catch (error) {
     console.log(`Error in Update Controller=>${error.message}`);
     return res.status(500).json({
-      status:false,
-      msg:"Internal Server Error"
+      status: false,
+      msg: "Internal Server Error",
     });
   }
-
 };
