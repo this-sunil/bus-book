@@ -154,7 +154,7 @@ export const updateUserController = async (req, res) => {
     field.push(`photo=$${index}`);
     value.push(photo);
     const query = `UPDATE users SET ${field.join(",")} WHERE id=$1`;
-    const { rows } = await pool.query(query, value);
+    const { rows } = await pool.query(query, [name, email, phone, gender,id]);
     if (rows.length > 0) {
       return res.status(200).json({
         status: true,
