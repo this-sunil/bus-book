@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 import authRoutes from "./src/routes/authRoute.js";
 dotenv.config();
 
@@ -9,7 +10,7 @@ cors({
     allowedHeaders:true,
     methods:["GET","POST,PUT","PATCH","DELETE"],
     optionsSuccessStatus:200,
-    origin:`https://bus-book-yzbe.onrender.com`
+    origin:`https://bus-book-system.vercel.app`
 });
 
 const app=express();
@@ -17,7 +18,16 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.use("/upload",express.static("/src/upload"));
+app.set("view engine","ejs");
+
+app.set("views",path.join("/src/views"));
+app.get("/dashboard",(req,res)=>{
+    return res.render("dashboard");
+});
 app.use("/api",authRoutes);
+
+
+
 app.listen(process.env.PORT,()=>{
-    console.log(`Server Started at https://bus-book-yzbe.onrender.com`);
+    console.log(`Server Started at https://bus-book-system.vercel.app`);
 });
