@@ -10,7 +10,7 @@ cors({
     allowedHeaders:true,
     methods:["GET","POST,PUT","PATCH","DELETE"],
     optionsSuccessStatus:200,
-    origin:`https://bus-book-system.vercel.app`
+    origin:`https://https://bus-book-one.vercel.app`
 });
 
 const app=express();
@@ -29,5 +29,5 @@ app.use("/api",authRoutes);
 
 
 app.listen(process.env.PORT,()=>{
-    console.log(`Server Started at https://bus-book-system.vercel.app`);
+    console.log(`Server Started at https://bus-book-one.vercel.app/`);
 });
