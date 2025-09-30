@@ -10,7 +10,7 @@ cors({
     allowedHeaders:true,
     methods:["GET","POST,PUT","PATCH","DELETE"],
     optionsSuccessStatus:200,
-    origin:`https://https://bus-book-one.vercel.app`
+    origin:`https://bus-book-one.vercel.app`
 });
 
 const app=express();
