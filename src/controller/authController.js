@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../middleware/token.js";
 
 const admin = async () => {
-  const query = `INSERT INTO users(name,email,phone,pass,role,gender,deviceToken) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
+  const query = `INSERT INTO users(name,email,phone,pass,role,gender,deviceToken,photo) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
   const hashPass = await bcrypt.hash(process.env.ADMIN_PASS, 10);
   const { rows } = await pool.query(query, [
     "admin",
@@ -13,6 +13,7 @@ const admin = async () => {
     "admin",
     "male",
     "12345678",
+    ""
   ]);
   if (rows.length > 0) {
     console.log(`Admin Inserted Data`);
@@ -21,8 +22,8 @@ const admin = async () => {
 
 const createUserTable = async () => {
   const query = `
-  
-  CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
+  DROP TABLE IF EXISTS users;
+  CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,photo TEXT NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
   pool.query(query, async (err) => {
     if (err) {
       throw err;
@@ -50,8 +51,8 @@ export const registerController = async (req, res) => {
     const role = "user";
     const hashPass=await bcrypt.hash(pass,10);
     const query =
-      "INSERT INTO users(name,email,phone,pass,role,gender,deviceToken) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *";
-    const { rows } = await pool.query(query, [name, email, phone, hashPass, role,gender,deviceToken]);
+      "INSERT INTO users(name,email,phone,pass,role,gender,deviceToken,photo) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *";
+    const { rows } = await pool.query(query, [name, email, phone, hashPass, role,gender,deviceToken,'']);
      delete rows[0].pass;
     if (rows.length > 0) {
       const token = await generateToken(role);
