@@ -5,7 +5,7 @@ const uploadDir=path.join(process.cwd(),"/src/upload");
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
       if(!fs.existsSync(uploadDir)){
-        mkdirSync(uploadDir);
+        fs.mkdirSync(uploadDir);
       }
       cb(null,uploadDir);
     },
