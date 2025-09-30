@@ -16,7 +16,6 @@ cors({
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
 app.use("/upload",express.static("/src/upload"));
 app.set("view engine","ejs");
 
@@ -26,6 +25,7 @@ app.get("/",(req,res)=>{
 });
 
 app.use("/api",authRoutes);
+
 app.listen(process.env.PORT,()=>{
     console.log(`Server Started at https://bus-book-one.vercel.app/`);
 });

@@ -20,7 +20,9 @@ const admin = async () => {
 };
 
 const createUserTable = async () => {
-  const query = `CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
+  const query = `
+  
+  CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
   pool.query(query, async (err) => {
     if (err) {
       throw err;
@@ -57,14 +59,14 @@ export const registerController = async (req, res) => {
         status: true,
         msg: "User Register Successfully",
         token: token,
-        result: rows[0],
+        result: rows[0]
       });
     }
   } catch (error) {
     console.log(`Error in register=> ${error.message}`);
     return res.status(500).json({
       status: false,
-      msg: "Internal Server Error",
+      msg: "Internal Server Error"
     });
   }
 };
