@@ -24,10 +24,8 @@ app.set("views",path.join(process.cwd(),"/src/views"));
 app.get("/",(req,res)=>{
     return res.render("dashboard");
 });
+
 app.use("/api",authRoutes);
-
-
-
 app.listen(process.env.PORT,()=>{
     console.log(`Server Started at https://bus-book-one.vercel.app/`);
 });
