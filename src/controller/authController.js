@@ -21,9 +21,7 @@ const admin = async () => {
 };
 
 const createUserTable = async () => {
-  const query = `
-  DROP TABLE IF EXISTS users;
-  CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,photo TEXT NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
+  const query = `CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,phone BIGINT NOT NULL,email VARCHAR(255) NOT NULL,pass VARCHAR(255) NOT NULL,role VARCHAR(255) NOT NULL,gender VARCHAR(255) NOT NULL,deviceToken varchar(255) NOT NULL,photo TEXT NOT NULL,created_at DATE DEFAULT CURRENT_DATE)`;
   pool.query(query, async (err) => {
     if (err) {
       throw err;
