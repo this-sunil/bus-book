@@ -20,8 +20,8 @@ app.use(express.urlencoded({extended:true}));
 app.use("/upload",express.static("/src/upload"));
 app.set("view engine","ejs");
 
-app.set("views",path.join("/src/views"));
-app.get("/dashboard",(req,res)=>{
+app.set("views",path.join(process.cwd(),"/src/views"));
+app.get("/",(req,res)=>{
     return res.render("dashboard");
 });
 app.use("/api",authRoutes);
