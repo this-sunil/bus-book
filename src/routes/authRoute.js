@@ -3,7 +3,7 @@ import { deleteUserController, loginController, registerController, updateUserCo
 import upload from "../middleware/upload.js";
 
 const router=express.Router();
-router.post("/register",upload.none(),registerController);
+router.post("/register",upload.single('photo'),registerController);
 router.post("/login",upload.none(),loginController);
 router.post("/updateUser",upload.single("photo"),updateUserController);
 router.delete("/deleteUser",upload.none(),deleteUserController);
