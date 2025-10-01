@@ -164,7 +164,7 @@ export const updateUserController = async (req, res) => {
       values.push(photo);
     
     values.push(uid);
-    const checkQuery=`SELECT * FROM users WHERE id=$${index}`;
+    const checkQuery=`SELECT * FROM users WHERE id=$1`;
     const result=await pool.query(checkQuery,[uid]);
     if(result.rows.length===0){
       return res.status(404).json({
