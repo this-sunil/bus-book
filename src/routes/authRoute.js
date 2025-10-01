@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUserController, loginController, registerController, updateUserController } from "../controller/authController.js";
+import { deleteUserController, getAllUserController, loginController, registerController, updateUserController } from "../controller/authController.js";
 import upload from "../middleware/upload.js";
 
 const router=express.Router();
@@ -7,4 +7,5 @@ router.post("/register",upload.single('photo'),registerController);
 router.post("/login",upload.none(),loginController);
 router.post("/updateUser",upload.single("photo"),updateUserController);
 router.delete("/deleteUser",upload.none(),deleteUserController);
+router.post("/getAllUser",upload.none(),getAllUserController);
 export default router;

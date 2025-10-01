@@ -196,3 +196,28 @@ export const updateUserController = async (req, res) => {
     });
   }
 };
+
+export const getAllUserController=async(req,res)=>{
+  try {
+    const  query=`SELECT * FROM users`;
+    const { rows }=await pool.query(query);
+    if(rows.length===0){
+      return res.status(404).json({
+        status:false,
+        msg:"No Data Found !!!"
+      });
+    }
+    return res.status(200).json({
+      status:true,
+      msg:"Fetch User Successfully !!!",
+      result:rows[0]
+    });
+    
+  } catch (error) {
+    console.log(`All User=>${error.message}`);
+    return res.status(500).json({
+      status:false,
+      msg:"Internal Server Error"
+    });
+  }
+};
