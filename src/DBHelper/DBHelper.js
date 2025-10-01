@@ -7,7 +7,7 @@ console.log(`User=>${process.env.DB_USER}`);
 const pool=new Pool({
   connectionString:process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false // 🔐 Required for Render-hosted PostgreSQL
+    rejectUnauthorized: false
   }
   // host:process.env.DB_HOST,
   // database:process.env.DB_NAME,

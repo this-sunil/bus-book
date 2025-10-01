@@ -138,23 +138,35 @@ export const deleteUserController = async (req, res) => {
 };
 
 export const updateUserController = async (req, res) => {
-  const { name, email, phone, gender } = req.body;
+  const { uid,name, phone, email, gender } = req.body;
   try {
+    if(!uid){
+      return res.status(404).json({
+        status:false,
+        msg:"Missing User id"
+      });
+    }
     const field = [];
-    const value = [];
-    const photo = req.file ? req.file.filename : "";
-    let index = 2;
-    const data = { name, email, phone, gender };
+    const values = [];
+    
+    let index = 1;
+    const data = { name, phone, email, gender };
+
     for (const [key, value] of Object.entries(data)) {
       if (value !== undefined) {
         field.push(`${key}=$${index++}`);
-        value.push(value);
+        values.push(value);
       }
     }
-    field.push(`photo=$${index}`);
-    value.push(photo);
-    const query = `UPDATE users SET ${field.join(",")} WHERE id=$1`;
-    const { rows } = await pool.query(query, [id,name, email, phone, gender]);
+     const photo = req.file ? req.file.filename : "";
+    if(photo){
+      field.push(`photo=$${index++}`);
+      values.push(photo);
+    }
+    values.push(uid);
+    const query = `UPDATE users SET ${field.join(', ')} WHERE id = $${index} RETURNING *`;
+    const { rows } = await pool.query(query, values);
+    delete rows[0].pass;
     if(rows.length===0){
       return res.status(400).json({
         status:false,
@@ -165,14 +177,14 @@ export const updateUserController = async (req, res) => {
       return res.status(200).json({
         status: true,
         msg: "Update User Successfully",
-        result: rows[0],
+        result: rows[0]
       });
     }
   } catch (error) {
     console.log(`Error in Update Controller=>${error.message}`);
     return res.status(500).json({
       status: false,
-      msg: "Internal Server Error",
+      msg: "Internal Server Error"
     });
   }
 };
