@@ -4,18 +4,20 @@ import fs from "fs";
 
 const uploadDir = path.join(process.cwd(), "/src/upload");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const ext = path.extname(file.originalname);
-    cb(null, `${timestamp}${ext}`);
-  }
+const storage = multer.memoryStorage({
+  
+  // destination: (req, file, cb) => {
+  //   if (!fs.existsSync(uploadDir)) {
+  //     fs.mkdirSync(uploadDir, { recursive: true });
+  //   }
+  //   cb(null, uploadDir);
+  // },
+  
+  // filename: (req, file, cb) => {
+  //   const timestamp = Date.now();
+  //   const ext = path.extname(file.originalname);
+  //   cb(null, `${timestamp}${ext}`);
+  // }
 });
 
 const fileFilter = (req, file, cb) => {

@@ -159,7 +159,7 @@ export const updateUserController = async (req, res) => {
       }
     }
      const photo = req.file ? req.file.filename : "";
-    
+      console.log(`File=>${req.file.filename}`);
       field.push(`photo=$${index++}`);
       values.push(photo);
     
