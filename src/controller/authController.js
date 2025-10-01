@@ -164,6 +164,14 @@ export const updateUserController = async (req, res) => {
       values.push(photo);
     
     values.push(uid);
+    const checkQuery=`SELECT * FROM users WHERE id=$${index}`;
+    const result=await pool.query(checkQuery,[uid]);
+    if(result.rows.length==0){
+      return res.status(404).json({
+        status:false,
+        msg:"User doesn't exist !!!"
+      });
+    }
     const query = `UPDATE users SET ${field.join(', ')} WHERE id = $${index} RETURNING *`;
     const { rows } = await pool.query(query, values);
     delete rows[0].pass;
