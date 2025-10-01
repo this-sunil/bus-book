@@ -159,10 +159,10 @@ export const updateUserController = async (req, res) => {
       }
     }
      const photo = req.file ? req.file.filename : "";
-    if(photo){
+    
       field.push(`photo=$${index++}`);
       values.push(photo);
-    }
+    
     values.push(uid);
     const query = `UPDATE users SET ${field.join(', ')} WHERE id = $${index} RETURNING *`;
     const { rows } = await pool.query(query, values);
